@@ -21,7 +21,7 @@ type Anime struct {
 	Rating 		string
 	Aired 		string
 	ImageUrl 	string
-	Genre 		[]string
+	Genre 		string 
 
 }
 // ID,Title,Score,Rank,Studio,AnimeType,Episode,Description,Rating,Aired,ImageUrl,Genre,
@@ -57,10 +57,15 @@ func read_csv() {
 			Rank: uint(rank),
 			Studio : record[4],
 			AnimeType : record[5],
-			Episodes : parseIntOrZero(record[6]),
-
-
+			Episode : uint(parseIntOrZero(record[6])),
+			Description: record[6],
+			Rating: record[7],
+			Aired : record[8], 
+			ImageUrl: record[9],
+			Genre:  record[10],
 		}
+		db.Create(&anime); 
+		
 	 }
 }
 
