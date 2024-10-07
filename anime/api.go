@@ -19,18 +19,18 @@ func getAnimeByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// find anime by id ;
-    for _,anime :=range animeList{
-		if anime.ID== id{
-			json.NewEncoder(w).Encode(anime); 
+	for _, anime := range animeList {
+		if anime.ID == id {
+			json.NewEncoder(w).Encode(anime)
 			return
 		}
-		http.Error(w,"Anime not found",http.StatusNotFound);
-		return 
+		http.Error(w, "Anime not found", http.StatusNotFound)
+		return
 	}
 
 }
 
-func searchAnime(w http.ResponseWriter,r*http.Request){
-	query :=r.URL.Query().Get("q")
-	
+func searchAnime(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("q")
+
 }
