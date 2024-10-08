@@ -5,9 +5,15 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/kasyap1234/anime-api/anime"
 	"net/http"
+	"github.com/kasyap1234/anime-api/database"
+
 )
 
 func main() {
+
+	database.ReadCSV(); 
+	
+
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Mount("/anime", anime.AnimeRouter())
