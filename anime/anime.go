@@ -15,9 +15,6 @@ func AnimeRouter() http.Handler {
 	r.Get("/", getAllAnime)
 	r.Get("/{id}", getAnimeByID)
 
-
-	return r ;
-
+	return r
 
 }
-
