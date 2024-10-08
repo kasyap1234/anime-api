@@ -156,12 +156,21 @@ func searchAnimeByType(w http.ResponseWriter, r *http.Request) {
 
 func sortAnimeByScore(w http.ResponseWriter, r *http.Request) {
 	var animeList []database.Anime
-	result := db.Order("score DESC").Find(&animeList)
-	if result.Error != nil {
-		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
-		return
+	if r.URL.Query().Get("sort") == "asc" {
+		result := db.Order("score ASC").Find(&animeList)
+		if result.Error != nil {
+			http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(animeList)
+
+	} else {
+		result := db.Order("score DESC").Find(&animeList)
+		if result.Error != nil {
+			http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(w).Encode(animeList)
 	}
-	json.NewEncoder(w).Encode(animeList)
+
 }
-
-
