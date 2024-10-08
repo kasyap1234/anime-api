@@ -1,0 +1,165 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is an anime API server.",
+        "title": "Anime API",
+        "contact": {},
+        "version": "2.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "paths": {
+        "/anime": {
+            "get": {
+                "description": "Get a list of all anime with optional pagination",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all anime",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/anime.PaginatedAnimeResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/anime/search": {
+            "get": {
+                "description": "Search for anime by name",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Search anime",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Anime name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/database.Anime"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/anime/{id}": {
+            "get": {
+                "description": "Get a single anime by its ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get anime by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Anime ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/database.Anime"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "anime.PaginatedAnimeResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/database.Anime"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "totalPages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "database.Anime": {
+            "type": "object",
+            "properties": {
+                "aired": {
+                    "type": "string"
+                },
+                "animeType": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "episode": {
+                    "type": "integer"
+                },
+                "genre": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "rank": {
+                    "type": "integer"
+                },
+                "rating": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "number"
+                },
+                "studio": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
