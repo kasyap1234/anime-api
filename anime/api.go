@@ -2,6 +2,7 @@ package anime
 
 import (
 	"encoding/json"
+	"log"
 	"math"
 	"net/http"
 	"strconv"
@@ -11,7 +12,6 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	
 )
 
 var db *gorm.DB
@@ -21,6 +21,7 @@ func InitDB() {
 	db, err = gorm.Open(sqlite.Open("anime.db"), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
+	log.Printf("connecting to the database...."); 
 	
 
 	if err != nil {
