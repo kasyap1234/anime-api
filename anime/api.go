@@ -22,8 +22,7 @@ func InitDB() {
 	db, err = gorm.Open(sqlite.Open("anime.db"), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
-	log.Printf("connecting to the database...."); 
-
+	log.Printf("connecting to the database....")
 
 	if err != nil {
 		panic("failed to connect database")
@@ -101,23 +100,68 @@ func getAnimeByID(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} database.Anime
 // @Router /anime/search [get]
 func searchAnime(w http.ResponseWriter, r *http.Request) {
-    query := r.URL.Query().Get("name")
-    var animeList []database.Anime
-    result := db.Where("title LIKE ?", "%"+query+"%").Find(&animeList)
+	query := r.URL.Query().Get("name")
+	var animeList []database.Anime
+	result := db.Where("title LIKE ?", "%"+query+"%").Find(&animeList)
 
-    if result.Error != nil {
-        http.Error(w, result.Error.Error(), http.StatusInternalServerError)
-        return
-    }
+	if result.Error != nil {
+		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
+	}
 
-    // Filter results to include only continuous matches
-    var filteredList []database.Anime
-    for _, anime := range animeList {
-        if strings.Contains(strings.ToLower(anime.Title), strings.ToLower(query)) {
-            filteredList = append(filteredList, anime)
-        }
-    }
+	// Filter results to include only continuous matches
+	var filteredList []database.Anime
+	for _, anime := range animeList {
+		if strings.Contains(strings.ToLower(anime.Title), strings.ToLower(query)) {
+			filteredList = append(filteredList, anime)
+		}
+	}
 
-    json.NewEncoder(w).Encode(filteredList)
+	json.NewEncoder(w).Encode(filteredList)
 }
+
+func searchAnimeByGenre(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("genre")
+	var animeList []database.Anime
+	result := db.Where("genre LIKE ?", "%"+query+"%").Find(&animeList)
+	if result.Error != nil {
+		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(animeList)
+
+}
+func searchAnimeByStudio(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("studio")
+	var animeList []database.Anime
+	result := db.Where("studio LIKE ?", "%"+query+"%").Find(&animeList)
+	if result.Error != nil {
+		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(animeList)
+
+}
+
+func searchAnimeByType(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("type")
+	var animeList []database.Anime
+	result := db.Where("anime_type LIKE ?", "%"+query+"%").Find(&animeList)
+	if result.Error != nil {
+		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(animeList)
+}
+
+func sortAnimeByScore(w http.ResponseWriter, r *http.Request) {
+	var animeList []database.Anime
+	result := db.Order("score DESC").Find(&animeList)
+	if result.Error != nil {
+		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(animeList)
+}
+
 

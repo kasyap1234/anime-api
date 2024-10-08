@@ -20,6 +20,12 @@ func AnimeRouter() http.Handler {
 	r.Get("/", getAllAnime)
 	r.Get("/{id}", getAnimeByID)
 	r.Get("/search", searchAnime)
+	r.Get("/search/genre", searchAnimeByGenre)
+	r.Get("/search/studio", searchAnimeByStudio)
+	r.Get("/search/type", searchAnimeByType)
+	r.Get("/sort/score", sortAnimeByScore)
+	
+	
 
 	return r
 }
