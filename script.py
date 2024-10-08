@@ -26,5 +26,5 @@ with open(input_file, 'r', newline='', encoding='utf-8') as infile, \
             new_row = [str(start_id)] + row
             writer.writerow(new_row)
             start_id += 1
-
+            
 print(f"Formatted CSV saved as {output_file}")

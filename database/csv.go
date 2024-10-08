@@ -45,7 +45,9 @@ func ReadCSV() {
 	for _, record := range records[1:] {
 		id, err := strconv.ParseUint(record[0], 10, 32)
 		score, err := strconv.ParseFloat(record[2], 64)
-		rank, err := strconv.ParseUint(record[3], 10, 64)
+		// rank, err := strconv.ParseUint(record[3], 10, 64)
+		rank :=ParseRank(record[3]); 
+
 		if err != nil {
 			log.Printf("Error parsing ID: %v", err)
 			continue
@@ -58,17 +60,27 @@ func ReadCSV() {
 			Studio:      record[4],
 			AnimeType:   record[5],
 			Episode:     uint(parseIntOrZero(record[6])),
-			Description: record[6],
-			Rating:      record[7],
-			Aired:       record[8],
-			ImageUrl:    record[9],
-			Genre:       record[10],
+			Description: record[7],
+			Rating:      record[8],
+			Aired:       record[9],
+			ImageUrl:    record[10],
+			Genre:       record[11],
 		}
 		db.Create(&anime)
 
 	}
-}
+	log.Println("CSV file read successfully")
 
+}
+func ParseRank(s string) int {
+	rank :=s[1:]; 
+	rankInt,err :=strconv.Atoi(rank); 
+	if err !=nil {
+		return 0; 
+	}
+	return rankInt; 
+
+}
 func parseIntOrZero(s string) int {
 	i, err := strconv.Atoi(s)
 	if err != nil {
