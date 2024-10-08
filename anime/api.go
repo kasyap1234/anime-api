@@ -12,6 +12,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"strings"
 )
 
 var db *gorm.DB
@@ -22,7 +23,7 @@ func InitDB() {
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	log.Printf("connecting to the database...."); 
-	
+
 
 	if err != nil {
 		panic("failed to connect database")
@@ -100,13 +101,23 @@ func getAnimeByID(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} database.Anime
 // @Router /anime/search [get]
 func searchAnime(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query().Get("name")
-	var animeList []database.Anime
-	result := db.Where("title LIKE ?", "%"+query+"%").Find(&animeList)
+    query := r.URL.Query().Get("name")
+    var animeList []database.Anime
+    result := db.Where("title LIKE ?", "%"+query+"%").Find(&animeList)
 
-	if result.Error != nil {
-		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
-		return
-	}
-	json.NewEncoder(w).Encode(animeList)
+    if result.Error != nil {
+        http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    // Filter results to include only continuous matches
+    var filteredList []database.Anime
+    for _, anime := range animeList {
+        if strings.Contains(strings.ToLower(anime.Title), strings.ToLower(query)) {
+            filteredList = append(filteredList, anime)
+        }
+    }
+
+    json.NewEncoder(w).Encode(filteredList)
 }
+
