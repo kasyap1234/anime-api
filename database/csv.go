@@ -1,4 +1,4 @@
-package database 
+package database
 
 import (
 	"encoding/csv"
@@ -46,7 +46,7 @@ func ReadCSV() {
 		id, err := strconv.ParseUint(record[0], 10, 32)
 		score, err := strconv.ParseFloat(record[2], 64)
 		// rank, err := strconv.ParseUint(record[3], 10, 64)
-		rank :=ParseRank(record[3]); 
+		rank := ParseRank(record[3])
 
 		if err != nil {
 			log.Printf("Error parsing ID: %v", err)
@@ -73,12 +73,12 @@ func ReadCSV() {
 
 }
 func ParseRank(s string) int {
-	rank :=s[1:]; 
-	rankInt,err :=strconv.Atoi(rank); 
-	if err !=nil {
-		return 0; 
+	rank := s[1:]
+	rankInt, err := strconv.Atoi(rank)
+	if err != nil {
+		return 0
 	}
-	return rankInt; 
+	return rankInt
 
 }
 func parseIntOrZero(s string) int {
