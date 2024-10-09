@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	
 )
 
 type Anime struct {
@@ -72,6 +73,7 @@ func ReadCSV() {
 	log.Println("CSV file read successfully")
 
 }
+
 func ParseRank(s string) int {
 	rank := s[1:]
 	rankInt, err := strconv.Atoi(rank)
