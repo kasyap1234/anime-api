@@ -12,7 +12,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"strings"
+	
 )
 
 var db *gorm.DB
@@ -101,76 +101,175 @@ func getAnimeByID(w http.ResponseWriter, r *http.Request) {
 // @Router /anime/search [get]
 func searchAnime(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("name")
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+
+	if page <= 0 {
+		page = 1
+	}
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+
 	var animeList []database.Anime
-	result := db.Where("title LIKE ?", "%"+query+"%").Find(&animeList)
+	var total int64
+
+	db.Model(&database.Anime{}).Where("title LIKE ?", "%"+query+"%").Count(&total)
+	result := db.Where("title LIKE ?", "%"+query+"%").Offset((page - 1) * pageSize).Limit(pageSize).Find(&animeList)
 
 	if result.Error != nil {
 		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// Filter results to include only continuous matches
-	var filteredList []database.Anime
-	for _, anime := range animeList {
-		if strings.Contains(strings.ToLower(anime.Title), strings.ToLower(query)) {
-			filteredList = append(filteredList, anime)
-		}
+	response := PaginatedAnimeResponse{
+		Data:       animeList,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: int(math.Ceil(float64(total) / float64(pageSize))),
 	}
 
-	json.NewEncoder(w).Encode(filteredList)
+	json.NewEncoder(w).Encode(response)
 }
 
 func searchAnimeByGenre(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("genre")
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+
+	if page <= 0 {
+		page = 1
+	}
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+
 	var animeList []database.Anime
-	result := db.Where("genre LIKE ?", "%"+query+"%").Find(&animeList)
+	var total int64
+
+	db.Model(&database.Anime{}).Where("genre LIKE ?", "%"+query+"%").Count(&total)
+	result := db.Where("genre LIKE ?", "%"+query+"%").Offset((page - 1) * pageSize).Limit(pageSize).Find(&animeList)
+
 	if result.Error != nil {
 		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(animeList)
 
+	response := PaginatedAnimeResponse{
+		Data:       animeList,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: int(math.Ceil(float64(total) / float64(pageSize))),
+	}
+
+	json.NewEncoder(w).Encode(response)
 }
+
 func searchAnimeByStudio(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("studio")
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+
+	if page <= 0 {
+		page = 1
+	}
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+
 	var animeList []database.Anime
-	result := db.Where("studio LIKE ?", "%"+query+"%").Find(&animeList)
+	var total int64
+
+	db.Model(&database.Anime{}).Where("studio LIKE ?", "%"+query+"%").Count(&total)
+	result := db.Where("studio LIKE ?", "%"+query+"%").Offset((page - 1) * pageSize).Limit(pageSize).Find(&animeList)
+
 	if result.Error != nil {
 		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(animeList)
 
+	response := PaginatedAnimeResponse{
+		Data:       animeList,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: int(math.Ceil(float64(total) / float64(pageSize))),
+	}
+
+	json.NewEncoder(w).Encode(response)
 }
 
 func searchAnimeByType(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("type")
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+
+	if page <= 0 {
+		page = 1
+	}
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+
 	var animeList []database.Anime
-	result := db.Where("anime_type LIKE ?", "%"+query+"%").Find(&animeList)
+	var total int64
+
+	db.Model(&database.Anime{}).Where("anime_type LIKE ?", "%"+query+"%").Count(&total)
+	result := db.Where("anime_type LIKE ?", "%"+query+"%").Offset((page - 1) * pageSize).Limit(pageSize).Find(&animeList)
+
 	if result.Error != nil {
 		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(animeList)
+
+	response := PaginatedAnimeResponse{
+		Data:       animeList,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: int(math.Ceil(float64(total) / float64(pageSize))),
+	}
+
+	json.NewEncoder(w).Encode(response)
 }
 
 func sortAnimeByScore(w http.ResponseWriter, r *http.Request) {
-	var animeList []database.Anime
-	if r.URL.Query().Get("sort") == "asc" {
-		result := db.Order("score ASC").Find(&animeList)
-		if result.Error != nil {
-			http.Error(w, result.Error.Error(), http.StatusInternalServerError)
-			return
-		}
-		json.NewEncoder(w).Encode(animeList)
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
 
-	} else {
-		result := db.Order("score DESC").Find(&animeList)
-		if result.Error != nil {
-			http.Error(w, result.Error.Error(), http.StatusInternalServerError)
-			return
-		}
-		json.NewEncoder(w).Encode(animeList)
+	if page <= 0 {
+		page = 1
+	}
+	if pageSize <= 0 {
+		pageSize = 10
 	}
 
+	var animeList []database.Anime
+	var total int64
+
+	db.Model(&database.Anime{}).Count(&total)
+
+	var result *gorm.DB
+	if r.URL.Query().Get("sort") == "asc" {
+		result = db.Order("score ASC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&animeList)
+	} else {
+		result = db.Order("score DESC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&animeList)
+	}
+
+	if result.Error != nil {
+		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	response := PaginatedAnimeResponse{
+		Data:       animeList,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: int(math.Ceil(float64(total) / float64(pageSize))),
+	}
+
+	json.NewEncoder(w).Encode(response)
 }
