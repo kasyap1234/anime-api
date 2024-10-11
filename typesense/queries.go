@@ -8,11 +8,11 @@ import (
 	"github.com/typesense/typesense-go/typesense/api"
 )
 
-func SearchAnime(client *typesense.Client, query string) (*api.SearchResult, error) {
+func SearchAnime(client *typesense.Client, query string,filter string) (*api.SearchResult, error) {
 	searchParameters := &api.SearchCollectionParams{
 		Q:        query,
 		QueryBy:  "Title,Description,Genre,Studio",
-		FilterBy: pointer.ToString("Score:>=7"),
+		FilterBy: pointer.ToString(filter),
 		SortBy:   pointer.ToString("Score:desc"),
 		Limit:    pointer.ToInt(20),
 	}

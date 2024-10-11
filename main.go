@@ -30,7 +30,13 @@ func main() {
 	}
 
 	fmt.Println("Anime data successfully indexed in Typesense!")
-
+	searchResults, err := typesense.SearchAnime(client, "action", "score>7.0")
+	if err != nil {
+		fmt.Printf(err.Error())
+	}
+	for _, hit := range *searchResults.Hits {
+		fmt.Printf("Title: %s, Score: %f\n", (*hit.Document)["Title"], (*hit.Document)["Score"])
+	}
 	r := chi.NewRouter()
 	
 	// r.Use(middleware.Logger)
@@ -43,4 +49,5 @@ func main() {
 	})
 
 	http.ListenAndServe(":3000", r)
+
 }
