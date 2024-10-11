@@ -19,3 +19,15 @@ func SearchAnime(client *typesense.Client, query string) (*api.SearchResult, err
 
 	return client.Collection("anime").Documents().Search(context.Background(), searchParameters)
 }
+
+
+// searchResults, err := typesense.SearchAnime(client, "action")
+// if err != nil {
+//     fmt.Printf("Error searching: %v\n", err)
+//     return
+// }
+
+// // Process the search results
+// for _, hit := range searchResults.Hits {
+//     fmt.Printf("Title: %s, Score: %f\n", hit.Document["Title"], hit.Document["Score"])
+// }
