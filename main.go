@@ -6,11 +6,12 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/kasyap1234/anime-api/anime"
-	
+	"github.com/kasyap1234/anime-api/meilisense"
 )
 
 func main() {
 	anime.InitDB()
+	meilisense.Convert()
 	r := chi.NewRouter()
 	
 	// r.Use(middleware.Logger)

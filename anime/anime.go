@@ -20,6 +20,7 @@ func AnimeRouter() http.Handler {
 	r.Get("/search/studio", searchAnimeByStudio)
 	r.Get("/search/type", searchAnimeByType)
 	r.Get("/sort/score", sortAnimeByScore)
+	r.Get("/meiliearch/search", Search)
 
 	return r
 }

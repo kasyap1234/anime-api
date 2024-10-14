@@ -9,9 +9,12 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/kasyap1234/anime-api/database"
+	"github.com/kasyap1234/anime-api/meilisense"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"github.com/meilisearch/meilisearch-go"
+
 )
 
 var db *gorm.DB
@@ -272,3 +275,22 @@ func sortAnimeByScore(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(response)
 }
+
+
+
+func Search(w http.ResponseWriter, r *http.Request) {
+	client := meilisense.InitClient()
+	query := r.URL.Query().Get("q")
+
+	searchResult, err := client.Index("anime").Search(query, &meilisearch.SearchRequest{
+		Limit: 10,
+	})
+
+	if err != nil {
+		http.Error(w, "Failed to search", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(searchResult)
+
+}
+
