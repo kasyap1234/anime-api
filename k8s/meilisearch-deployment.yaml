@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: meilisearch
+  name: meilisearch-deployment
   labels:
     app: meilisearch
 spec:
@@ -15,8 +15,8 @@ spec:
         app: meilisearch
     spec:
       containers:
-        -name: meilisearch
-        image: getmeili/meilisearch:latest
-        ports:
-          -containerPort: 7700
+        - name: meilisearch
+          image: getmeili/meilisearch:latest
+          ports:
+            - containerPort: 7700
 
