@@ -43,7 +43,9 @@ func toFloat(s string) float64 {
 
 
 func InitClient()meilisearch.ServiceManager {
+
 	client :=meilisearch.New("http://meilisearch:7700",meilisearch.WithAPIKey("masterKey"))
+
 	return client
 
 }
