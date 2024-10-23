@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	
 )
 
 type Anime struct {

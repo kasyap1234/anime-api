@@ -23,7 +23,7 @@ func toInt(s string) int {
 }
 func convertIndex(s string)int {
 	val :=s[1:]; 
-	fmt.Printf("val: %v\n", val);
+	
 
 	return toInt(val);
 }
@@ -119,6 +119,7 @@ fmt.Printf("client: %v\n", client);
 		log.Fatalf("Failed to add documents to Meilisearch: %v", err)
 	}
 
-	fmt.Printf("Documents uploaded! Task UID: %d\n", task.TaskUID)
+	fmt.Printf("Task ID: %v\n", task)
+
 }
 
