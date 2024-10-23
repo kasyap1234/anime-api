@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   anime-api:
-    image: kasyapdocker123/anime-api:latest
+    build: .
     ports:
       - "3000:3000"
     depends_on:
