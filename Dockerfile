@@ -19,5 +19,6 @@ WORKDIR /app
 COPY --from=builder /app/main .
 # Copy the SQLite database into the container
 COPY ./anime.db ./anime.db
+COPY ./anime-2-formatted.csv ./anime-2-formatted.csv
 EXPOSE 3000
 CMD ["./main"]
