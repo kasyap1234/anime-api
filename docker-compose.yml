@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  anime-api:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - meilisearch
+    environment:
+      - MEILI_HOST=http://meilisearch:7700
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    ports:
+      - "7700:7700"
+    volumes:
+      - meili_data:/meili_data
+
+volumes:
+  meili_data:
