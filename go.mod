@@ -4,6 +4,7 @@ go 1.23.2
 
 require (
 	github.com/go-chi/chi/v5 v5.1.0
+	github.com/joho/godotenv v1.5.1
 	github.com/meilisearch/meilisearch-go v0.28.0
 	gorm.io/driver/sqlite v1.5.6
 	gorm.io/gorm v1.25.12
