@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/joho/godotenv"
+	
 	"github.com/meilisearch/meilisearch-go"
 )
 
@@ -19,10 +19,7 @@ var (
 )
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	
 
 	MEILISEARCH_URL = os.Getenv("MEILISEARCH_URL")
 	MEILISEARCH_KEY = os.Getenv("MEILISEARCH_KEY")
